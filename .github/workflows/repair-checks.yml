@@ -1,0 +1,28 @@
+name: Repair intake checks
+on:
+  push:
+    branches: [repair-intake-admin]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm install --ignore-scripts
+      - run: npm test
+      - run: npx playwright install --with-deps chromium
+      - run: sudo apt-get update && sudo apt-get install -y fonts-noto-cjk poppler-utils
+      - run: node scripts/pdf-smoke.mjs
+      - name: Verify Korean text in PDF
+        run: |
+          pdftotext test-output/sample.pdf test-output/sample.txt
+          python3 -c "from pathlib import Path; s=Path('test-output/sample.txt').read_text(); assert '검증용 고객' in s; assert '초기화' in s; assert '싱가포르' in s"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-repair-pdf
+          path: test-output/sample.pdf
