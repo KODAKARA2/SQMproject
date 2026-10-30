@@ -1,0 +1,29 @@
+/* Approved 1254px square artwork: four 618px panels, separated by a gutter. */
+.comic-panel {
+  width: 100%;
+  aspect-ratio: 1;
+  background-image: url("assets/training-comic.png");
+  background-size: 202.913% 202.913%;
+  background-repeat: no-repeat;
+  background-color: #e5ebdf;
+  border-radius: 14px;
+  box-shadow: 0 5px 0 #102d2a35;
+}
+.comic-start { background-position: left top; }
+.comic-correct { background-position: right top; }
+.comic-wrong { background-position: left bottom; }
+.comic-result { background-position: right bottom; }
+.intro > div > .comic-panel { max-width: 410px; margin-top: 28px; }
+.result-main > .comic-panel { max-width: 300px; margin: 18px auto 26px; }
+.comic-feedback { display: grid; grid-template-columns: minmax(140px, 190px) minmax(0, 1fr); gap: 22px; align-items: center; }
+.comic-feedback .source { overflow-wrap: anywhere; }
+@media (max-width: 760px) {
+  .intro > div > .comic-panel { max-width: 330px; margin: 24px auto 0; }
+  .comic-feedback { grid-template-columns: 1fr; gap: 20px; }
+  .comic-feedback > .comic-panel { max-width: 240px; justify-self: center; }
+  .result-main > .comic-panel { max-width: 260px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .comic-feedback > .comic-panel { animation: comic-pop .24s ease-out; }
+  @keyframes comic-pop { from { opacity: .5; transform: scale(.95); } to { opacity: 1; transform: scale(1); } }
+}
